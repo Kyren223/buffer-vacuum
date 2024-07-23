@@ -12,6 +12,8 @@ local defaults = {
   -- Enable printing out the number of buffers open when entering a buffer
   -- and printing out which buffer is being deleted when deleting buffers
   enable_messages = false,
+
+  debug = false,
 }
 
 ---@type Config

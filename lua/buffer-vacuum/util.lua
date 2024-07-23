@@ -51,10 +51,23 @@ function M.delete_oldest_buffer()
     return
   end
 
+  if config.options.debug then
+    print('Inside delete oldest buffer')
+  end
+
   local current_buffer = vim.api.nvim_get_current_buf()
+
+  if config.options.debug then
+    print('Current buffer: ' .. current_buffer)
+  end
 
   -- Get all buffers
   local listed_buffers = vim.fn.getbufinfo({ bufloaded = 1 })
+
+  if config.options.debug then
+    print('Listed buffers: \n' .. vim.inspect(listed_buffers))
+  end
+
   -- Initialize an empty table to store buffers associated with files
   local file_buffers = {}
   -- Iterate through each buffer
@@ -78,20 +91,42 @@ function M.delete_oldest_buffer()
       table.insert(file_buffers, buff)
     end
   end
+
+  if config.options.debug then
+    print('File buffers: \n' .. vim.inspect(file_buffers))
+    print('Considered buffers:' .. considered_buffers)
+  end
+
   -- Sort file buffers by last accessed time
   table.sort(file_buffers, function(a, b)
     return a.lastused > b.lastused
   end)
+
+  if config.options.debug then
+    print('File buffers (post sort): \n' .. vim.inspect(file_buffers))
+  end
+
   -- Delete the oldest buffer
 
   considered_buffers = considered_buffers + #file_buffers
+
+  if config.options.debug then
+    print('Considered buffers (after +#filebuffers):' .. considered_buffers)
+  end
 
   if config.options.enable_messages then
     vim.print('Buffer Vacuum: ' .. considered_buffers .. ' counted buffers')
   end
 
+  if config.options.debug then
+    print('Expr: ' .. considered_buffers >= config.options.max_buffers)
+  end
   while considered_buffers >= config.options.max_buffers do
     local oldest_bufnr = file_buffers[#file_buffers]
+    if config.options.debug then
+      print('Expr (loop): ' .. considered_buffers >= config.options.max_buffers)
+      print('Oldest buffer' .. oldest_bufnr)
+    end
     if config.options.enable_messages then
       print(
         'Deleting the oldest buffer:',
@@ -102,6 +137,9 @@ function M.delete_oldest_buffer()
 
     -- Recalculate the number of considered buffers after deleting
     considered_buffers = considered_buffers - 1
+    if config.options.debug then
+      print('Considered buffers (loop at end):' .. considered_buffers)
+    end
   end
 end
 
