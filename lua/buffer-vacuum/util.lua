@@ -58,7 +58,7 @@ function M.delete_oldest_buffer()
   local current_buffer = vim.api.nvim_get_current_buf()
 
   if config.options.debug then
-    print('Current buffer: ' .. current_buffer)
+    print('Current buffer: ' .. tostring(current_buffer))
   end
 
   -- Get all buffers
@@ -94,7 +94,7 @@ function M.delete_oldest_buffer()
 
   if config.options.debug then
     print('File buffers: \n' .. vim.inspect(file_buffers))
-    print('Considered buffers:' .. considered_buffers)
+    print('Considered buffers:' .. tostring(considered_buffers))
   end
 
   -- Sort file buffers by last accessed time
@@ -111,21 +111,21 @@ function M.delete_oldest_buffer()
   considered_buffers = considered_buffers + #file_buffers
 
   if config.options.debug then
-    print('Considered buffers (after +#filebuffers):' .. considered_buffers)
+    print('Considered buffers (after +#filebuffers):' .. tostring(considered_buffers))
   end
 
   if config.options.enable_messages then
-    vim.print('Buffer Vacuum: ' .. considered_buffers .. ' counted buffers')
+    vim.print('Buffer Vacuum: ' .. tostring(considered_buffers) .. ' counted buffers')
   end
 
   if config.options.debug then
-    print('Expr: ' .. considered_buffers >= config.options.max_buffers)
+    print('Expr: ' .. tostring(considered_buffers) >= config.options.max_buffers)
   end
   while considered_buffers >= config.options.max_buffers do
     local oldest_bufnr = file_buffers[#file_buffers]
     if config.options.debug then
-      print('Expr (loop): ' .. considered_buffers >= config.options.max_buffers)
-      print('Oldest buffer' .. oldest_bufnr)
+      print('Expr (loop): ' .. tostring(considered_buffers) >= config.options.max_buffers)
+      print('Oldest buffer' .. tostring(oldest_bufnr.bufnr))
     end
     if config.options.enable_messages then
       print(
@@ -138,7 +138,7 @@ function M.delete_oldest_buffer()
     -- Recalculate the number of considered buffers after deleting
     considered_buffers = considered_buffers - 1
     if config.options.debug then
-      print('Considered buffers (loop at end):' .. considered_buffers)
+      print('Considered buffers (loop at end):' .. tostring(considered_buffers))
     end
   end
 end
