@@ -119,12 +119,12 @@ function M.delete_oldest_buffer()
   end
 
   if config.options.debug then
-    print('Expr: ' .. tostring(considered_buffers) >= config.options.max_buffers)
+    print('Expr: ' .. tostring(considered_buffers >= config.options.max_buffers))
   end
   while considered_buffers >= config.options.max_buffers do
     local oldest_bufnr = file_buffers[#file_buffers]
     if config.options.debug then
-      print('Expr (loop): ' .. tostring(considered_buffers) >= config.options.max_buffers)
+      print('Expr (loop): ' .. tostring(considered_buffers >= config.options.max_buffers))
       print('Oldest buffer' .. tostring(oldest_bufnr.bufnr))
     end
     if config.options.enable_messages then
